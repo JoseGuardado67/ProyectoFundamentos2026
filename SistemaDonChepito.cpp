@@ -621,3 +621,110 @@ void modificarCarrito(vector<producto> &carrito, vector<producto> &inventario)//
         }
     }
 }
+
+void procederPago(vector<producto> &carrito, vector<producto> &inventario)//persona 1
+{
+    if (carrito.empty())
+    {
+        cout << "El carrito esta vacio. No hay nada que pagar.\n";
+        return;
+    }
+
+    double totalNormal = 0;
+    double totalPagar = 0;
+
+    cout << "\n=============================================\n";
+    cout << "                   RESUMEN                    \n";
+    cout << "=============================================\n";
+
+    // que es size t
+    for (size_t i = 0; i < carrito.size(); i++)
+    {
+        double precioFinal;
+
+        if (carrito[i].tieneDescuento == true)
+        {
+
+            precioFinal = carrito[i].precioOferta;
+        }
+        else
+        {
+
+            precioFinal = carrito[i].precio;
+        }
+
+        double subtotal = precioFinal * carrito[i].cantidad;
+
+        totalNormal += (carrito[i].precio * carrito[i].cantidad);
+        totalPagar += subtotal;
+
+        cout << carrito[i].nombre << " x" << carrito[i].cantidad << endl;
+        if (carrito[i].tieneDescuento)
+        {
+            cout << "  Original: $" << carrito[i].precio << " | Oferta!: $" << carrito[i].precioOferta << endl;
+        }
+
+        else
+        {
+            cout << "  Unitario: $" << carrito[i].precio << endl;
+        }
+        cout << "  Subtotal: $" << subtotal << "\n\n";
+    }
+
+    double totalAhorrado = totalNormal - totalPagar;
+
+    cout << "---------------------------------------------\n";
+    cout << "Total Sin Descuentos: $" << totalNormal << endl;
+    cout << "Total Ahorrado:       $" << totalAhorrado << endl;
+    cout << "TOTAL A PAGAR:        $" << totalPagar << endl;
+    cout << "=============================================\n";
+
+    double dineroIngresado = 0;
+    cout << "Ingrese la cantidad de dinero con la que va a pagar: $";
+    cin >> dineroIngresado;
+
+    if (dineroIngresado >= totalPagar)
+    {
+        double cambio = dineroIngresado - totalPagar;
+        cout << "\n¡Pago Exitoso!\n";
+        cout << "Su cambio es: $" << cambio << "\n";
+
+        ofstream factura("factura.txt");
+        if (factura.is_open())
+        {
+            factura << "=============================================\n";
+            factura << "       SISTEMA DE COMIDA UNIVERSITARIA       \n";
+            factura << "              FACTURA DE COMPRA              \n";
+            factura << "=============================================\n";
+            for (size_t i = 0; i < carrito.size(); i++)
+            {
+                double pf; 
+
+                if (carrito[i].tieneDescuento == true)
+                {
+                    pf = carrito[i].precioOferta;
+                }
+                else
+                {
+                    pf = carrito[i].precio; 
+                }
+
+                factura << carrito[i].nombre << " x" << carrito[i].cantidad << " -> Subtotal: $" << (pf * carrito[i].cantidad) << "\n";
+            }
+            factura << "---------------------------------------------\n";
+            factura << "Total Sin Ofertas:    $" << totalNormal << "\n";
+            factura << "Total Ahorrado:       $" << totalAhorrado << "\n";
+            factura << "TOTAL NETO PAGADO:    $" << totalPagar << "\n";
+            factura << "Dinero Recibido:      $" << dineroIngresado << "\n";
+            factura << "Cambio Entregado:     $" << cambio << "\n";  //es necesario el cambio?
+            factura << "=============================================\n";
+            factura.close();
+            cout << "Factura impresa con exito en 'factura.txt'!\n";
+        }
+        carrito.clear();
+    }
+    else
+    {
+        cout << "\n[ERROR]: Dinero insuficiente. Le faltan $" << (totalPagar - dineroIngresado) << ".\n";
+    }
+}
