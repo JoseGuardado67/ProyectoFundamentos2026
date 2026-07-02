@@ -362,8 +362,98 @@ void menuCliente(int &opcionCliente)//persona 1
     cin >> opcionCliente;
 }
 
+producto agregarCarrito(vector<producto> &carrito, vector<producto> &inventario)//persona 2
+{
+    producto b;
+    int Opcion = 0;
+    int seleccion = 0;
+    int agregados = 0;
 
+    mostrarInventario(inventario);
 
+    while (Opcion != 2)
+    {
+        bool encontrado = false;
+        cout << "Que producto desea agregar?\n";
+        cout << "Ingrese el numero del producto: \n";
+
+        cin >> seleccion;
+
+        for (int i = 0; i < inventario.size(); i++)
+        {
+            if (i == seleccion - 1)
+            {
+
+                cout << "Que tanta/s " << inventario[i].nombre << " desea llevar?: ";
+                cin >> agregados;
+                if (agregados <= 0 || agregados > inventario[i].cantidad)
+                {
+                    cout << "La cantidad ingresada no es valida\n";
+                    cout << "Ingrese nuevamente la cantidad: \n";
+                    cin >> agregados;
+                }
+                else
+                {
+                    inventario[i].cantidad -= agregados;
+
+                    producto productoParaCarrito;
+                    productoParaCarrito.nombre = inventario[i].nombre;
+                    productoParaCarrito.diaExp = inventario[i].diaExp;
+                    productoParaCarrito.mesExp = inventario[i].mesExp;
+                    productoParaCarrito.anioExp = inventario[i].anioExp;
+                    productoParaCarrito.cantidad = agregados;
+                    productoParaCarrito.precio = inventario[i].precio;
+                    productoParaCarrito.precioOferta = inventario[i].precioOferta;
+
+                    // CORRECCIÓN AQUÍ: Guardar si tiene o no descuento en el carrito
+                    productoParaCarrito.tieneDescuento = inventario[i].tieneDescuento;
+                    productoParaCarrito.porcentaje = inventario[i].porcentaje;
+
+                    bool existe = false;
+                    for (int j = 0; j < carrito.size(); j++)
+                    {
+                        if (productoParaCarrito.nombre == carrito[j].nombre)
+                        {
+                            carrito[j].cantidad += productoParaCarrito.cantidad;
+                            existe = true;
+                            cout << "Se actualizo correctamente la cantidad de " << carrito[j].nombre << "!\n";
+                            break;
+                        }
+                    }
+                    if (!existe)
+                    {
+                        carrito.push_back(productoParaCarrito);
+                        cout << "Opcion agregada correctamente\n";
+                    }
+                    encontrado = true;
+                }
+            }
+        }
+
+        if (encontrado == false)
+        {
+            cout << "No se encontro el producto deseado\n";
+        }
+
+        cout << "Desea volver a ingresar otro producto al carrito?\n";
+        cout << "1. Si\n";
+        cout << "2. No\n";
+
+        cin >> Opcion;
+
+        if (Opcion == 1)
+        {
+            mostrarInventario(inventario);
+        }
+        else if (Opcion != 1 && Opcion != 2)
+        {
+            cout << "ERROR: Opcion invalida\n";
+            cout << "Regresando nuevamente al menu para seleccionar productos...\n";
+        }
+    }
+
+    return b;
+}
 
 void verCarrito(const vector<producto> &carrito)//persona 1
 {
