@@ -53,6 +53,55 @@ void guardarInventarioEnArchivo(const vector<producto> &inventario, string nombr
     }
 }
 
+void cargarInventarioDesdeArchivo(vector<producto> &inventario, string nombreArchivo)
+{
+    ifstream archivo(nombreArchivo);
+    
+    if (archivo.is_open())
+    {
+        inventario.clear(); 
+        string primeraLinea;
+        
+        // Leemos la primera linea completa para capturar la cantidad de productos
+        if (getline(archivo, primeraLinea))
+        {
+            if (primeraLinea.empty()) 
+            {
+                archivo >> ws;
+                getline(archivo, primeraLinea);
+            }
+            
+            // Convertimos de texto a numero entero de forma segura
+            int cantidadProductos = stoi(primeraLinea);
+            
+            for (int i = 0; i < cantidadProductos; i++)
+            {
+                producto temporal;
+                
+                // 1. Leemos la linea completa del nombre del producto
+                if (!getline(archivo, temporal.nombre)) break; 
+                
+                // 2. Leemos la linea de abajo con los datos numericos correspondientes
+                archivo >> temporal.diaExp >> temporal.mesExp >> temporal.anioExp 
+                        >> temporal.precio >> temporal.cantidad 
+                        >> temporal.precioOferta >> temporal.tieneDescuento 
+                        >> temporal.porcentaje >> temporal.ahorro;
+                
+                // IMPORTANTE: Limpiamos el enter (\n) residual para que el siguiente getline no se trabe
+                archivo >> ws; 
+                        
+                inventario.push_back(temporal);
+            }
+        }
+        archivo.close();
+        cout << "-> ¡Inventario de la tienda cargado con exito!\n";
+    }
+    else
+    {
+        cout << "[Aviso]: No se encontraron datos previos de esta tienda. Inicia con inventario vacio.\n";
+    }
+}
+
 
 void menuPrincipal(int &opcionPrincipal)//jose
 {
