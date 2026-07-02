@@ -133,4 +133,221 @@ void mostrarInventario(const vector<producto> &inventario)//walter
     cout << "===================================================================\n";
 }
 
+void Descuentos(vector<producto> &inventario)//austin
+{
+    int opciondescuentos;
+    int elemento;
+    float porcentaje;
+    bool tieneDescuento = false;
 
+    cout << "\n--Selecione una opcion.\n";
+    cout << "1. Ingresar Promocion.\n";
+    cout << "2. Eliminar una Promocion.\n";
+    cout << "3. Regresar al menu anterio.\n";
+    cout << "Opcion: ";
+    cin >> opciondescuentos;
+
+    if (opciondescuentos == 1)
+    {
+        if (inventario.empty())
+        {
+            cout << "No hay productos a los cuales se les pueda aplicar un descuento.";
+        }
+
+        else
+        {
+            mostrarInventario(inventario);
+
+            cout << "Ingrese el producto al cual desea aplicarle un descuento: ";
+            cin >> elemento;
+            elemento--;
+
+            if (elemento >= 0 && elemento < inventario.size())
+            {
+                cout << "Ingrese el porcentaje de descuento que desea aplicar a " << inventario[elemento].nombre << ": " << endl;
+                cin >> porcentaje;
+                inventario[elemento].porcentaje = porcentaje;
+
+                // calcular el descuento
+                inventario[elemento].precioOferta = inventario[elemento].precio * ((100.0 - porcentaje) / 100.0);
+                inventario[elemento].tieneDescuento = true;
+
+                cout << "Nuevo precio de oferta: $" << inventario[elemento].precioOferta << endl;
+            }
+            else
+            {
+                cout << "Numero de producto no valido.\n";
+            }
+        }
+    }
+
+    else if (opciondescuentos == 2)
+    {
+        mostrarInventario(inventario);
+
+        cout << "\nIngrese el numero del producto al cual desea quitarle la promocion: ";
+        cin >> elemento;
+        elemento--;
+
+        if (elemento >= 0 && elemento < inventario.size())
+        {
+            if (inventario[elemento].tieneDescuento)
+            {
+                //aqui se elimina el bool de descuento en el producto
+                inventario[elemento].tieneDescuento = false;                 
+                inventario[elemento].precioOferta = inventario[elemento].precio; // Restauro el precio a sin oferta
+                cout << "----->El producto '" << inventario[elemento].nombre << "' volvio a su precio original de $" << inventario[elemento].precio << endl;
+            }
+            else
+            {
+                cout << "Este producto no tiene ningun descuento.\n";
+            }
+        }
+        else
+        {
+            cout << "Numero de producto no valido.\n";
+        }
+    }
+
+    else{
+        cout<<"ERROR";
+    }
+}
+
+void modificarProducto(vector<producto> &inventario)//jose
+{
+
+    mostrarInventario(inventario);
+
+    int Opcioncambio;
+    cout << "Ingrese el numero del producto que desea gestionar: ";
+    cin >> Opcioncambio;
+    Opcioncambio--;
+
+    if (Opcioncambio >= 0 && Opcioncambio < inventario.size())
+    {
+        int opModificar = 0;
+
+        do
+        {
+            cout << "\n---Gestionando: " << inventario[Opcioncambio].nombre << " ---\n";
+            cout << "1. Modificar Nombre\n";
+            cout << "2. Modificar Fecha de Caducidad\n";
+            cout << "3. Modificar Precio\n";
+            cout << "4. Modificar Cantidad (Stock)\n";
+            cout << "5. ELIMINAR ESTE PRODUCTO\n";
+            cout << "6. Volver atras\n";
+            cout << "Opcion: ";
+            cin >> opModificar;
+
+            if (opModificar == 1)
+            {
+                cout << "Ingrese el nuevo nombre: ";
+                getline(cin >> ws, inventario[Opcioncambio].nombre);
+                cout << "Nombre actualizado!\n";
+            }
+            else if (opModificar == 2)
+            {
+                int dia, mes, anio;
+                cout << "Ingrese la nueva fecha de caducidad: ";
+                cin >> dia >> mes >> anio;
+
+                cin >> inventario[Opcioncambio].diaExp >> inventario[Opcioncambio].mesExp >> inventario[Opcioncambio].anioExp;
+                cout << "Fecha actualizada!\n";
+            }
+            else if (opModificar == 3)
+            {
+                // modificar precio si es que tiene descuento
+                if (inventario[Opcioncambio].tieneDescuento)
+                {
+                    int QuiereDescuento = 0;
+
+                    cout << "\n======================================================\n";
+                    cout << "Este producto tiene un " << inventario[Opcioncambio].porcentaje << "% de descuento activo.\n";
+                    cout << "======================================================\n";
+
+                    cout << "Ingrese el nuevo precio: ";
+                    cin >> inventario[Opcioncambio].precio;
+
+                    while (QuiereDescuento != 2)
+                    {
+                
+                        cout << "\nDesea que se le aplique el descuento antes declarado?: " << endl;
+                        cout << "1. Si.\n";
+                        cout << "2. No.\n";
+                        cout << "Opcion: ";
+                        cin >> QuiereDescuento;
+
+                        if (QuiereDescuento == 1)
+                        {
+                            inventario[Opcioncambio].precioOferta = inventario[Opcioncambio].precio * ((100.0 - inventario[Opcioncambio].porcentaje) / 100.0);
+                            cout << "Actualizando precio de " << inventario[Opcioncambio].nombre << "....\n";
+                            cout << "Nuevo precio de oferta recalculado: $" << inventario[Opcioncambio].precioOferta << "\n";
+                            break;
+                        }
+
+                        else if (QuiereDescuento == 2)
+                        {
+                            cout << "Eliminando descuento...\n";
+                            inventario[Opcioncambio].tieneDescuento = false;                         // quito la oferta
+                            inventario[Opcioncambio].precioOferta = inventario[Opcioncambio].precio; // Restauro el precio a sin oferta
+                            cout << "----->El producto " << inventario[Opcioncambio].nombre << " actualizo el precio a $" << inventario[Opcioncambio].precio << endl;
+                            break;
+                        }
+
+                        else
+                        {
+                            cout << "\nERROR Elija una opcion\n";
+                        }
+                    }
+                }
+                
+                //y si no tiene descuento, solo actualizar el precio
+                else
+                {
+                    cout << "Ingrese el nuevo precio: ";
+                    cin >> inventario[Opcioncambio].precio;
+                    cout << "Precio actualizado!\n";
+                }
+            }
+            else if (opModificar == 4)
+            {
+                cout << "Ingrese la nueva cantidad: ";
+                cin >> inventario[Opcioncambio].cantidad;
+                cout << "Stock actualizado!\n";
+            }
+            else if (opModificar == 5)
+            { 
+                //podemos modificar esta parte, o directamente decir que es ia
+                string seguro;
+                cout << "Esta completamente seguro de eliminar '" << inventario[Opcioncambio].nombre << "'? (s= si/n= no): ";
+                cin >> seguro;
+
+                if (seguro == "s" || seguro == "S") //raro
+                {
+                    // Borramos el producto usando el iterador del vector
+                    inventario.erase(inventario.begin() + Opcioncambio);
+                    cout << "Producto eliminado exitosamente del inventario!\n";
+                    break;
+                }
+                else
+                {
+                    cout << "Eliminacion cancelada.\n";
+                }
+            }
+            else if (opModificar == 6)
+            {
+                cout << "Regresando al menu del dueno...\n";
+            }
+            else
+            {
+                cout << "Opcion no valida. Intente de nuevo.\n";
+            }
+
+        } while (opModificar != 6);
+    }
+    else
+    {
+        cout << "Numero de producto no valido.\n";
+    }
+}
