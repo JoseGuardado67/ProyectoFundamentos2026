@@ -351,3 +351,54 @@ void modificarProducto(vector<producto> &inventario)//jose
         cout << "Numero de producto no valido.\n";
     }
 }
+
+void menuCliente(int &opcionCliente)//persona 1
+{
+    cout << "\n============Bienvenido al menu del Cliente=============\n";
+    cout << "1. Agregar productos al carrito.\n";
+    cout << "2. Ver carrito Y proceder con el pago.\n";
+    cout << "3. Volver al menu principal.\n";
+    cout << "Opcion: ";
+    cin >> opcionCliente;
+}
+
+
+
+
+void verCarrito(const vector<producto> &carrito)//persona 1
+{
+    // 1. Declaramos la variable para el gran total aquí arriba.
+    // Empezamos en 0.0 porque el carrito está limpio.
+    float totalPagar = 0.0;
+
+    if (carrito.empty())
+    {
+        cout << "======== El carrito se encuentra vacio ========\n";
+    }
+    else
+    {
+        cout << "==========Productos Agregados==========\n";
+        for (int i = 0; i < carrito.size(); i++)
+        {
+            cout << i + 1 << ". " << carrito[i].nombre << " || ";
+            cout << "Cantidad: " << carrito[i].cantidad;
+
+            if (carrito[i].tieneDescuento)
+            {
+                cout << " || Precio con Oferta: $" << carrito[i].precioOferta << endl;
+
+                totalPagar = totalPagar + (carrito[i].precioOferta * carrito[i].cantidad);
+            }
+            else
+            {
+                cout << " || Precio por unidad: $" << carrito[i].precio << endl;
+
+                totalPagar = totalPagar + (carrito[i].precio * carrito[i].cantidad);
+            }
+        }
+
+        cout << "=======================================\n";
+        cout << " TOTAL A PAGAR: $" << totalPagar << "\n";
+        cout << "=======================================\n";
+    }
+}
