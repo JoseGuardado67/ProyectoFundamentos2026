@@ -728,3 +728,166 @@ void procederPago(vector<producto> &carrito, vector<producto> &inventario)//pers
         cout << "\n[ERROR]: Dinero insuficiente. Le faltan $" << (totalPagar - dineroIngresado) << ".\n";
     }
 }
+
+int main()
+{
+    int escoger = 0;
+    vector<producto> inventario;
+    vector<producto> carrito;
+
+    //gestionInicialTiendas(inventario);
+
+    while (escoger != 3)
+    {
+        menuPrincipal(escoger);
+
+        if (escoger == 1)
+        {
+            int contador = 1; // vuelvo a declarar cada que quiera volver a entrar
+            bool accesoConcedido = false;
+
+            while (contador <= 5 && !accesoConcedido)
+            {
+
+                cout << "PorFavor, Inicie Sesion: " << endl;
+                cout << "Ingrese el usuario: " << endl;
+                cin >> usuarioIntento;
+
+                cout << "Ingrese la contrasena: " << endl;
+                cin >> contraIntento;
+
+                if (usuarioIntento == usuarioadmin && contraIntento == contraadmin)
+                {
+
+                    cout << "\n************* Bienvenido ***********" << endl;
+                    accesoConcedido = true;
+                    int seleccionDueno = 0;
+
+                    // Menu de dueño inicio
+                    while (seleccionDueno != 5)
+                    {
+                        menuDueno(seleccionDueno);
+
+                        if (seleccionDueno == 1)
+                        {
+                            agregarProducto(inventario);
+                            //guardarInventarioEnArchivo(inventario, archivoTiendaActiva);
+                        }
+                        else if (seleccionDueno == 2)
+                        {
+                            mostrarInventario(inventario);
+                        }
+
+                        // Modificar inv
+                        else if (seleccionDueno == 3)
+                        {
+                        
+                            modificarProducto(inventario);
+                            //guardarInventarioEnArchivo(inventario, archivoTiendaActiva);
+                        }
+
+                        else if (seleccionDueno == 4)
+                        {
+
+                            Descuentos(inventario);
+                            //guardarInventarioEnArchivo(inventario, archivoTiendaActiva);
+                        }
+                    }
+                    break;
+                }
+
+                else
+                {
+                    cout << "\nERROR: LAS CREDENCIALES NO COINCIDEN." << endl;
+                    if (contador == 5)
+                    {
+                        cout << "Has llegado al limite maximo de intentos permitidos.\n";
+                    }
+
+                    // en esta parte voy a preguntarle a la parsona que si despues de 3 intentos ya no quiere seguir intentando y mejor quiere retirarse
+                    // aparecera cada que la persona intente seguir iniciando sesion, esto puede modificarse para que solo aparezca cuando especificamente este en el intento 3
+
+                    else if (contador >= 2)
+                    {
+                        int opEscape;
+                        cout << "\n Desea Regresar al menu principal?\n";
+                        cout << "1. Seguir intentando\n";
+                        cout << "2. Regresar al menu principal\n";
+                        cout << "Opcion: ";
+                        cin >> opEscape;
+
+                        if (opEscape == 2)
+                        {
+                            regresarMenuPrincipal = true;
+                            cout << "Regresando al menu principal...\n";
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        cout << "Intentelo de nuevo.\n";
+                    }
+                    contador++;
+                }
+            }
+        }
+        else if (escoger == 2)
+        {
+            int seleccionCliente = 0;
+
+            while (seleccionCliente != 3)
+            {
+                menuCliente(seleccionCliente);
+
+                if (seleccionCliente == 1)
+                {
+                    agregarCarrito(carrito, inventario);
+                }
+                else if (seleccionCliente == 2)
+                {
+                    int OpCarrito;
+                    int OpModificar;
+                    verCarrito(carrito);
+
+                    cout << "Proceder con el pago?\n";
+                    cout << "1. si\n";
+                    cout << "2. no\n";
+                    cout << "opcion: ";
+                    cin >> OpCarrito;
+
+                    switch (OpCarrito)
+                    {
+                    case 1:
+
+                        procederPago(carrito, inventario);
+                        break;
+
+                    case 2:
+                        cout << "Desea modificar el carrito?\n";
+                        cout << "1. si." << endl;
+                        cout << "2. No, regresar al menu cliente." << endl;
+                        cin >> OpModificar;
+
+                        if (OpModificar == 1)
+                        {
+                            modificarCarrito(carrito, inventario);
+                        }
+                        break;
+
+                    default:
+                        cout << "Regresando al menu cliente...";
+                        break;
+                    }
+                }
+
+                else
+                {
+                    cout << "Error seleccione una opcion.";
+                }
+            }
+        }
+    }
+
+    cout << "Gracias por usarme!\n";
+    return 0;
+}
