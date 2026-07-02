@@ -24,6 +24,36 @@ struct producto
     double ahorro;
 };
 
+void guardarInventarioEnArchivo(const vector<producto> &inventario, string nombreArchivo)
+{
+    ofstream archivo(nombreArchivo);
+    
+    if (archivo.is_open())
+    {
+        // Guardamos el numero de productos en la primera linea
+        archivo << inventario.size() << endl;
+
+        for (int i = 0; i < inventario.size(); i++)
+        {
+            // LINEA 1: El nombre del producto va solo en su propia linea (soporta espacios)
+            archivo << inventario[i].nombre << endl;
+            
+            // LINEA 2: Todos los numeros van abajo separados por un espacio simple
+            archivo << inventario[i].diaExp << " "
+                    << inventario[i].mesExp << " "
+                    << inventario[i].anioExp << " "
+                    << inventario[i].precio << " "
+                    << inventario[i].cantidad << " "
+                    << inventario[i].precioOferta << " "
+                    << inventario[i].tieneDescuento << " "
+                    << inventario[i].porcentaje << " "
+                    << inventario[i].ahorro << endl;
+        }
+        archivo.close();
+    }
+}
+
+
 void menuPrincipal(int &opcionPrincipal)//jose
 {
     cout << "\n===Bienvenido al sistema de comida universitaria===\n";
