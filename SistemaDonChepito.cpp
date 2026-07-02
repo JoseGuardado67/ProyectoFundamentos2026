@@ -492,3 +492,132 @@ void verCarrito(const vector<producto> &carrito)//persona 1
         cout << "=======================================\n";
     }
 }
+
+void modificarCarrito(vector<producto> &carrito, vector<producto> &inventario)//persona 2
+{
+    int opcion = 0;
+    int cambio = 0;
+    int seleccion = 0;
+    int cantidad = 0;
+    bool encontrado = false;
+    string seguro;
+
+    if (carrito.empty())
+    {
+        cout << "El carrito se encuentra vacio en este momento\n";
+    }
+    else
+    {
+        cout << "Ingrese el numero del producto que desea modificar: \n";
+        cin >> opcion;
+
+        opcion--; // Ajustamos al índice de C++ (0, 1, 2...)
+
+        // Validamos que el número ingresado esté dentro del rango actual del carrito
+        if (opcion >= 0 && opcion < carrito.size())
+        {
+            cout << "Del producto: " << carrito[opcion].nombre << " ¿que desea hacer?: \n";
+            cout << "1. Cambiar el producto por otro\n";
+            cout << "2. Eliminar producto\n";
+            cout << "Opcion: ";
+            cin >> cambio;
+
+            if (cambio == 1)
+            {
+                mostrarInventario(inventario);
+
+                cout << "¿Que producto desea agregar?: \n";
+                cin >> seleccion;
+
+                seleccion--; // Ajustamos al índice de C++
+
+                // Validamos que la selección exista en el inventario global
+                if (seleccion >= 0 && seleccion < inventario.size())
+                {
+                    cout << "¿Cuanto/s " << inventario[seleccion].nombre << " desea llevar?\n";
+                    cin >> cantidad;
+
+                    // Validamos si hay suficiente stock disponible en la tienda
+                    if (cantidad > 0 && cantidad <= inventario[seleccion].cantidad)
+                    {
+                        // 1. Opcional pero recomendado: Devolvemos al inventario el stock del producto que vamos a quitar
+                        for (int j = 0; j < inventario.size(); j++)
+                        {
+                            if (inventario[j].nombre == carrito[opcion].nombre)
+                            {
+                                inventario[j].cantidad += carrito[opcion].cantidad;
+                                break;
+                            }
+                        }
+
+                        // 2. Aplicamos tu idea: Sobreescribimos los datos del struct en la misma posición
+                        carrito[opcion].nombre = inventario[seleccion].nombre;
+                        carrito[opcion].diaExp = inventario[seleccion].diaExp;
+                        carrito[opcion].mesExp = inventario[seleccion].mesExp;
+                        carrito[opcion].anioExp = inventario[seleccion].anioExp;
+                        carrito[opcion].cantidad = cantidad;
+
+                        // Validamos si el nuevo producto seleccionado tiene descuento activo
+                        if (inventario[seleccion].tieneDescuento)
+                        {
+                            carrito[opcion].precio = inventario[seleccion].precioOferta;
+                        }
+                        else
+                        {
+                            carrito[opcion].precio = inventario[seleccion].precio;
+                        }
+
+                        // 3. Descontamos las nuevas unidades del inventario global
+                        inventario[seleccion].cantidad -= cantidad;
+
+                        cout << "Producto reemplazado exitosamente en el carrito.\n";
+                        encontrado = true;
+                    }
+                    else
+                    {
+                        cout << "Cantidad no valida o stock insuficiente en el inventario.\n";
+                    }
+                }
+
+                if (!encontrado)
+                {
+                    cout << "No se pudo realizar el cambio de producto.\n";
+                }
+            }
+            else if (cambio == 2)
+            {
+                cout << "Esta completamente seguro de eliminar '" << carrito[opcion].nombre << "' del carrito? (s/n): ";
+                cin >> seguro;
+
+                if (seguro == "s" || seguro == "S")
+                {
+                    // Devolvemos las unidades al inventario antes de borrar el elemento del carrito
+                    for (int j = 0; j < inventario.size(); j++)
+                    {
+                        if (inventario[j].nombre == carrito[opcion].nombre)
+                        {
+                            inventario[j].cantidad += carrito[opcion].cantidad;
+                            break;
+                        }
+                    }
+
+                    // Borramos definitivamente la posición del carrito (el vector se encoge automáticamente)
+                    carrito.erase(carrito.begin() + opcion);
+                    cout << "Producto eliminado exitosamente del carrito.\n";
+                }
+                else
+                {
+                    cout << "Eliminacion cancelada.\n";
+                }
+            }
+            else
+            {
+                cout << "ERROR: Opcion no valida.\n";
+            }
+        }
+        else
+        {
+            cout << "Numero de producto no valido.\n";
+        }
+    }
+}
