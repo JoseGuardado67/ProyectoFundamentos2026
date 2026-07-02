@@ -102,6 +102,94 @@ void cargarInventarioDesdeArchivo(vector<producto> &inventario, string nombreArc
     }
 }
 
+void gestionInicialTiendas(vector<producto> &inventario)
+{
+    int opcion = 0;
+    
+    cout << "=============================================\n";
+    cout << "       BIENVENIDO AL GESTOR DE TIENDAS       \n";
+    cout << "=============================================\n";
+    cout << "1. Cargar una tienda existente\n";
+    cout << "2. Crear una nueva tienda\n";
+    cout << "Opcion: ";
+    cin >> opcion;
+
+    if (opcion == 2)
+    {
+        string nombreTienda;
+        cout << "\nIngrese el nombre de la nueva tienda: ";
+        getline(cin >> ws, nombreTienda);
+
+        archivoTiendaActiva = nombreTienda + ".txt";
+
+        // Guardamos el nombre completo de la tienda en el registro maestro
+        ofstream lista("lista_tiendas.txt", ios::app);
+        if (lista.is_open())
+        {
+            lista << nombreTienda << endl;
+            lista.close();
+        }
+
+        // Inicializamos el archivo de la tienda con 0 productos asignados
+        ofstream nuevaTienda(archivoTiendaActiva);
+        nuevaTienda << 0 << endl;
+        nuevaTienda.close();
+
+        cout << "Tienda '" << nombreTienda << "' creada con exito!\n";
+    }
+    else
+    {
+        ifstream lista("lista_tiendas.txt");
+        vector<string> tiendasDisponibles;
+        string nombreTiendaLeida;
+
+        cout << "\n--- Tiendas Disponibles ---\n";
+        int contadorTiendas = 1;
+
+        if (lista.is_open())
+        {
+            // CORRECCION: Lee la linea entera del archivo maestro (nombres con espacios completos)
+            while (getline(lista, nombreTiendaLeida))
+            {
+                if (nombreTiendaLeida.empty()) continue; 
+
+                cout << contadorTiendas << ". " << nombreTiendaLeida << endl;
+                tiendasDisponibles.push_back(nombreTiendaLeida);
+                contadorTiendas++;
+            }
+            lista.close();
+        }
+
+        if (tiendasDisponibles.empty())
+        {
+            cout << "No hay tiendas registradas todavia. Creando 'mi_tienda.txt' por defecto.\n";
+            archivoTiendaActiva = "mi_tienda.txt";
+        }
+        else
+        {
+            int seleccion;
+            cout << "Seleccione el numero de su tienda: ";
+            cin >> seleccion;
+            
+            cin.ignore(); // Limpiamos el enter del buffer de entrada
+
+            seleccion--; 
+
+            if (seleccion >= 0 && seleccion < tiendasDisponibles.size())
+            {
+                archivoTiendaActiva = tiendasDisponibles[seleccion] + ".txt";
+                cargarInventarioDesdeArchivo(inventario, archivoTiendaActiva);
+            }
+            else
+            {
+                cout << "Seleccion invalida. Cargando tienda por defecto.\n";
+                archivoTiendaActiva = "mi_tienda.txt";
+            }
+        }
+    }
+}
+
+
 
 void menuPrincipal(int &opcionPrincipal)//jose
 {
