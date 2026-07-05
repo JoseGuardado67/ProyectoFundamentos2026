@@ -622,6 +622,26 @@ producto agregarCarrito(vector<producto> &carrito, vector<producto> &inventario)
     return b;
 }
 
+//original sin total
+void verCarrito(const vector<producto> &carrito)
+{
+    if (carrito.empty())
+    {
+        cout << "======== El carrito se encuentra vacio ========\n";
+    }
+    else
+    {
+        cout << "==========Productos Agregados==========\n";
+        for (int i = 0; i < carrito.size(); i++)
+        {
+            cout << i + 1 << ". " << carrito[i].nombre << " || ";
+            cout << "Cantidad: " << carrito[i].cantidad << " || Price Unitario: $";
+            cout << (carrito[i].tieneDescuento ? carrito[i].precioOferta : carrito[i].precio) << "\n";
+        }
+    }
+}
+
+
 void verCarrito(const vector<producto> &carrito)//persona 1
 {
     // 1. Declaramos la variable para el gran total aquí arriba.
