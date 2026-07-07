@@ -962,32 +962,10 @@ int main()
                     if (contador == 3)
                     {
                         cout << "Has llegado al limite maximo de intentos permitidos.\n";
+                        break;
                     }
 
-                    // en esta parte voy a preguntarle a la parsona que si despues de 3 intentos ya no quiere seguir intentando y mejor quiere retirarse
-                    // aparecera cada que la persona intente seguir iniciando sesion, esto puede modificarse para que solo aparezca cuando especificamente este en el intento 3
-                    /*
-                    else if (contador >= 2)
-                    {
-                        int opEscape;
-                        cout << "\n Desea Regresar al menu principal?\n";
-                        cout << "1. Seguir intentando\n";
-                        cout << "2. Regresar al menu principal\n";
-                        cout << "Opcion: ";
-                        cin >> opEscape;
 
-                        if (opEscape == 2)
-                        {
-                            regresarMenuPrincipal = true;
-                            cout << "Regresando al menu principal...\n";
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        cout << "Intentelo de nuevo.\n";
-                    }
-                    */
                     contador++;
                 }
             }
