@@ -24,7 +24,7 @@ struct producto
     double ahorro;
 };
 
-void guardarInventarioEnArchivo(const vector<producto> &inventario, string nombreArchivo)
+void guardarInventarioEnArchivo(const vector<producto> &inventario, string nombreArchivo)//rafa
 {
     ofstream archivo(nombreArchivo);
     
@@ -53,7 +53,7 @@ void guardarInventarioEnArchivo(const vector<producto> &inventario, string nombr
     }
 }
 
-void cargarInventarioDesdeArchivo(vector<producto> &inventario, string nombreArchivo)
+void cargarInventarioDesdeArchivo(vector<producto> &inventario, string nombreArchivo)//rafa
 {
     ifstream archivo(nombreArchivo);
     
@@ -102,7 +102,7 @@ void cargarInventarioDesdeArchivo(vector<producto> &inventario, string nombreArc
     }
 }
 
-void gestionInicialTiendas(vector<producto> &inventario)
+void gestionInicialTiendas(vector<producto> &inventario)//rafa
 {
     int opcion = 0;
     
@@ -519,7 +519,7 @@ void modificarProducto(vector<producto> &inventario)//jose
     }
 }
 
-void menuCliente(int &opcionCliente)//persona 1
+void menuCliente(int &opcionCliente)//walter
 {
     cout << "\n============Bienvenido al menu del Cliente=============\n";
     cout << "1. Agregar productos al carrito.\n";
@@ -529,7 +529,7 @@ void menuCliente(int &opcionCliente)//persona 1
     cin >> opcionCliente;
 }
 
-producto agregarCarrito(vector<producto> &carrito, vector<producto> &inventario)//persona 2
+producto agregarCarrito(vector<producto> &carrito, vector<producto> &inventario)//Auistin
 {
     producto b;
     int Opcion = 0;
@@ -624,7 +624,7 @@ producto agregarCarrito(vector<producto> &carrito, vector<producto> &inventario)
 
 
 
-void verCarrito(const vector<producto> &carrito)//persona 1
+void verCarrito(const vector<producto> &carrito)//Walter
 {
     // 1. Declaramos la variable para el gran total aquí arriba.
     // Empezamos en 0.0 porque el carrito está limpio.
@@ -662,7 +662,7 @@ void verCarrito(const vector<producto> &carrito)//persona 1
     }
 }
 
-void modificarCarrito(vector<producto> &carrito, vector<producto> &inventario)//persona 2
+void modificarCarrito(vector<producto> &carrito, vector<producto> &inventario)//Austin
 {
     int opcion = 0;
     int cambio = 0;
@@ -791,7 +791,7 @@ void modificarCarrito(vector<producto> &carrito, vector<producto> &inventario)//
     }
 }
 
-void procederPago(vector<producto> &carrito, vector<producto> &inventario)//persona 1
+void procederPago(vector<producto> &carrito, vector<producto> &inventario)//Walter
 {
     if (carrito.empty())
     {
