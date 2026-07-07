@@ -24,7 +24,7 @@ struct producto
     double ahorro;
 };
 
-void guardarInventarioEnArchivo(const vector<producto> &inventario, string nombreArchivo)//rafa
+void guardarInventarioEnArchivo(const vector<producto> &inventario, string nombreArchivo)
 {
     ofstream archivo(nombreArchivo);
     
@@ -53,7 +53,7 @@ void guardarInventarioEnArchivo(const vector<producto> &inventario, string nombr
     }
 }
 
-void cargarInventarioDesdeArchivo(vector<producto> &inventario, string nombreArchivo)//rafa
+void cargarInventarioDesdeArchivo(vector<producto> &inventario, string nombreArchivo)
 {
     ifstream archivo(nombreArchivo);
     
@@ -102,7 +102,7 @@ void cargarInventarioDesdeArchivo(vector<producto> &inventario, string nombreArc
     }
 }
 
-void gestionInicialTiendas(vector<producto> &inventario)//rafa
+void gestionInicialTiendas(vector<producto> &inventario)
 {
     int opcion = 0;
     
@@ -189,9 +189,7 @@ void gestionInicialTiendas(vector<producto> &inventario)//rafa
     }
 }
 
-
-
-void menuPrincipal(int &opcionPrincipal)//jose
+void menuPrincipal(int &opcionPrincipal)
 {
     cout << "\n===Bienvenido al sistema de comida universitaria===\n";
     cout << "1. Entrar como Dueno del local\n";
@@ -201,7 +199,7 @@ void menuPrincipal(int &opcionPrincipal)//jose
     cin >> opcionPrincipal;
 }
 
-void menuDueno(int &opcionDueno)//jose
+void menuDueno(int &opcionDueno)
 {
     cout << "\n============ Menu del Dueno =============\n";
     cout << "1. Agregar productos\n";
@@ -214,7 +212,7 @@ void menuDueno(int &opcionDueno)//jose
 }
 
 
-producto agregarProducto(vector<producto> &inventario)//jose
+producto agregarProducto(vector<producto> &inventario)
 {
     int opSeguir = 0;
     producto a;
@@ -225,7 +223,7 @@ producto agregarProducto(vector<producto> &inventario)//jose
         cout << "Ingrese nombre del producto: ";
         getline(cin >> ws, a.nombre);
 
-        
+        int dia, mes, anio;
         cout << "Ingrese fecha de vencimiento (Dia, Mes, Anio): ";
         cin >> a.diaExp >> a.mesExp >> a.anioExp;
 
@@ -243,7 +241,6 @@ producto agregarProducto(vector<producto> &inventario)//jose
         inventario.push_back(a);
         cout << "Producto agregado exitosamente!\n";
 
-    
         cout << "\n Desea agregar otro producto? \n";
         cout << "1. Si\n";
         cout << "2. No\n";
@@ -260,14 +257,12 @@ producto agregarProducto(vector<producto> &inventario)//jose
             cout << "Opcion: ";
             cin >> opSeguir;
         }
-
     }
-    cout<<"Regresando al menu de dueno...";
     return a;
 }
 
 // const Si por error dentro de esta función intentas borrar un producto o cambiar un precio, el compilador te dará un error y no te dejará correr el programa.
-void mostrarInventario(const vector<producto> &inventario)//walter
+void mostrarInventario(const vector<producto> &inventario)
 {
     cout << "==========================Inventario actual==========================\n";
     if (inventario.empty())
@@ -300,7 +295,9 @@ void mostrarInventario(const vector<producto> &inventario)//walter
     cout << "===================================================================\n";
 }
 
-void Descuentos(vector<producto> &inventario)//austin
+
+
+void Descuentos(vector<producto> &inventario)
 {
     int opciondescuentos;
     int elemento;
@@ -375,13 +372,9 @@ void Descuentos(vector<producto> &inventario)//austin
             cout << "Numero de producto no valido.\n";
         }
     }
-
-    else{
-        cout<<"ERROR";
-    }
 }
 
-void modificarProducto(vector<producto> &inventario)//jose
+void modificarProducto(vector<producto> &inventario)
 {
 
     mostrarInventario(inventario);
@@ -487,10 +480,10 @@ void modificarProducto(vector<producto> &inventario)//jose
             { 
                 //podemos modificar esta parte, o directamente decir que es ia
                 string seguro;
-                cout << "Esta completamente seguro de eliminar '" << inventario[Opcioncambio].nombre << "'? (s= si/n= no): ";
+                cout << "Esta completamente seguro de eliminar '" << inventario[Opcioncambio].nombre << "'? (s/n): ";
                 cin >> seguro;
 
-                if (seguro == "s" || seguro == "S") //raro
+                if (seguro == "s" || seguro == "S")
                 {
                     // Borramos el producto usando el iterador del vector
                     inventario.erase(inventario.begin() + Opcioncambio);
@@ -519,7 +512,7 @@ void modificarProducto(vector<producto> &inventario)//jose
     }
 }
 
-void menuCliente(int &opcionCliente)//walter
+void menuCliente(int &opcionCliente)
 {
     cout << "\n============Bienvenido al menu del Cliente=============\n";
     cout << "1. Agregar productos al carrito.\n";
@@ -529,7 +522,7 @@ void menuCliente(int &opcionCliente)//walter
     cin >> opcionCliente;
 }
 
-producto agregarCarrito(vector<producto> &carrito, vector<producto> &inventario)//Auistin
+producto agregarCarrito(vector<producto> &carrito, vector<producto> &inventario)
 {
     producto b;
     int Opcion = 0;
@@ -622,9 +615,7 @@ producto agregarCarrito(vector<producto> &carrito, vector<producto> &inventario)
     return b;
 }
 
-
-
-void verCarrito(const vector<producto> &carrito)//Walter
+void verCarrito(const vector<producto> &carrito)
 {
     // 1. Declaramos la variable para el gran total aquí arriba.
     // Empezamos en 0.0 porque el carrito está limpio.
@@ -662,7 +653,7 @@ void verCarrito(const vector<producto> &carrito)//Walter
     }
 }
 
-void modificarCarrito(vector<producto> &carrito, vector<producto> &inventario)//Austin
+void modificarCarrito(vector<producto> &carrito, vector<producto> &inventario)
 {
     int opcion = 0;
     int cambio = 0;
@@ -791,7 +782,7 @@ void modificarCarrito(vector<producto> &carrito, vector<producto> &inventario)//
     }
 }
 
-void procederPago(vector<producto> &carrito, vector<producto> &inventario)//Walter
+void procederPago(vector<producto> &carrito, vector<producto> &inventario)
 {
     if (carrito.empty())
     {
@@ -904,7 +895,7 @@ int main()
     vector<producto> inventario;
     vector<producto> carrito;
 
-    //gestionInicialTiendas(inventario);
+    gestionInicialTiendas(inventario);
 
     while (escoger != 3)
     {
@@ -940,7 +931,7 @@ int main()
                         if (seleccionDueno == 1)
                         {
                             agregarProducto(inventario);
-                            //guardarInventarioEnArchivo(inventario, archivoTiendaActiva);
+                            guardarInventarioEnArchivo(inventario, archivoTiendaActiva);
                         }
                         else if (seleccionDueno == 2)
                         {
@@ -952,14 +943,14 @@ int main()
                         {
                         
                             modificarProducto(inventario);
-                            //guardarInventarioEnArchivo(inventario, archivoTiendaActiva);
+                            guardarInventarioEnArchivo(inventario, archivoTiendaActiva);
                         }
 
                         else if (seleccionDueno == 4)
                         {
 
                             Descuentos(inventario);
-                            //guardarInventarioEnArchivo(inventario, archivoTiendaActiva);
+                            guardarInventarioEnArchivo(inventario, archivoTiendaActiva);
                         }
                     }
                     break;
@@ -968,14 +959,14 @@ int main()
                 else
                 {
                     cout << "\nERROR: LAS CREDENCIALES NO COINCIDEN." << endl;
-                    if (contador == 5)
+                    if (contador == 3)
                     {
                         cout << "Has llegado al limite maximo de intentos permitidos.\n";
                     }
 
                     // en esta parte voy a preguntarle a la parsona que si despues de 3 intentos ya no quiere seguir intentando y mejor quiere retirarse
                     // aparecera cada que la persona intente seguir iniciando sesion, esto puede modificarse para que solo aparezca cuando especificamente este en el intento 3
-
+                    /*
                     else if (contador >= 2)
                     {
                         int opEscape;
@@ -996,6 +987,7 @@ int main()
                     {
                         cout << "Intentelo de nuevo.\n";
                     }
+                    */
                     contador++;
                 }
             }
