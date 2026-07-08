@@ -68,21 +68,20 @@ void cargarInventarioDesdeArchivo(vector<producto> &inventario, string nombreArc
                 getline(archivo, primeraLinea);
             }
 
-            // uso de ia (gemini)  stoi Conversión segura de string a entero
+            // USO DE IA (gemini):  stoi Conversión segura de string a entero
             int cantidadProductos = stoi(primeraLinea);
 
             for (int i = 0; i < cantidadProductos; i++)
             {
                 producto temporal;
 
-                // 1. Leemos la linea completa del nombre del producto
+                // USO IA (gemini): !getline: se traduce como "Si NO se pudo leer la línea"
                 if (!getline(archivo, temporal.nombre))
                     break;
 
-                // 2. Leemos la linea de abajo con los datos numericos correspondientes
                 archivo >> temporal.diaExp >> temporal.mesExp >> temporal.anioExp >> temporal.precio >> temporal.cantidad >> temporal.precioOferta >> temporal.tieneDescuento >> temporal.porcentaje >> temporal.ahorro;
 
-                // limpiar todos los espacios en blanco y solo dejar ls datos
+                // limpiar todos los espacios en blanco
                 archivo >> ws;
 
                 inventario.push_back(temporal);
@@ -145,7 +144,7 @@ void gestionInicialTiendas(vector<producto> &inventario)
 
             while (getline(lista, nombreTiendaLeida))
             {
-                // uso ia (gemini) Filtro para ignorar registros vacíos
+                // USO DE IA (gemini): Filtro para ignorar registros vacíos
                 if (nombreTiendaLeida.empty())
                     continue;
 
@@ -563,6 +562,8 @@ producto agregarCarrito(vector<producto> &carrito, vector<producto> &inventario)
                     productoParaCarrito.porcentaje = inventario[i].porcentaje;
 
                     bool existe = false;
+
+                    //USO IA (gemini) para veririfar un producto existente en el carrito y actualizar la cantidad 
                     for (int j = 0; j < carrito.size(); j++)
                     {
                         if (productoParaCarrito.nombre == carrito[j].nombre)
