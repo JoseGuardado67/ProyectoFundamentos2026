@@ -27,7 +27,7 @@ struct producto
 void guardarInventarioEnArchivo(const vector<producto> &inventario, string nombreArchivo)
 {
     ofstream archivo(nombreArchivo);
-    
+
     if (archivo.is_open())
     {
         archivo << inventario.size() << endl;
@@ -36,7 +36,7 @@ void guardarInventarioEnArchivo(const vector<producto> &inventario, string nombr
         {
 
             archivo << inventario[i].nombre << endl;
-            
+
             archivo << inventario[i].diaExp << " "
                     << inventario[i].mesExp << " "
                     << inventario[i].anioExp << " "
@@ -54,39 +54,37 @@ void guardarInventarioEnArchivo(const vector<producto> &inventario, string nombr
 void cargarInventarioDesdeArchivo(vector<producto> &inventario, string nombreArchivo)
 {
     ifstream archivo(nombreArchivo);
-    
+
     if (archivo.is_open())
     {
-        inventario.clear(); 
+        inventario.clear();
         string primeraLinea;
 
         if (getline(archivo, primeraLinea))
         {
-            if (primeraLinea.empty()) 
+            if (primeraLinea.empty())
             {
                 archivo >> ws;
                 getline(archivo, primeraLinea);
             }
-            
-            //uso de ia (gemini)  stoi Conversión segura de string a entero
+
+            // uso de ia (gemini)  stoi Conversión segura de string a entero
             int cantidadProductos = stoi(primeraLinea);
-            
+
             for (int i = 0; i < cantidadProductos; i++)
             {
                 producto temporal;
-                
+
                 // 1. Leemos la linea completa del nombre del producto
-                if (!getline(archivo, temporal.nombre)) break; 
-                
+                if (!getline(archivo, temporal.nombre))
+                    break;
+
                 // 2. Leemos la linea de abajo con los datos numericos correspondientes
-                archivo >> temporal.diaExp >> temporal.mesExp >> temporal.anioExp 
-                        >> temporal.precio >> temporal.cantidad 
-                        >> temporal.precioOferta >> temporal.tieneDescuento 
-                        >> temporal.porcentaje >> temporal.ahorro;
-                
-                // IMPORTANTE: Limpiamos el enter (\n) residual para que el siguiente getline no se trabe
-                archivo >> ws; 
-                        
+                archivo >> temporal.diaExp >> temporal.mesExp >> temporal.anioExp >> temporal.precio >> temporal.cantidad >> temporal.precioOferta >> temporal.tieneDescuento >> temporal.porcentaje >> temporal.ahorro;
+
+                // limpiar todos los espacios en blanco y solo dejar ls datos
+                archivo >> ws;
+
                 inventario.push_back(temporal);
             }
         }
@@ -102,7 +100,7 @@ void cargarInventarioDesdeArchivo(vector<producto> &inventario, string nombreArc
 void gestionInicialTiendas(vector<producto> &inventario)
 {
     int opcion = 0;
-    
+
     cout << "=============================================\n";
     cout << "       BIENVENIDO AL GESTOR DE TIENDAS       \n";
     cout << "=============================================\n";
@@ -119,7 +117,6 @@ void gestionInicialTiendas(vector<producto> &inventario)
 
         archivoTiendaActiva = nombreTienda + ".txt";
 
-        // Guardamos el nombre completo de la tienda en el registro maestro
         ofstream lista("lista_tiendas.txt", ios::app);
         if (lista.is_open())
         {
@@ -127,7 +124,7 @@ void gestionInicialTiendas(vector<producto> &inventario)
             lista.close();
         }
 
-        // Inicializamos el archivo de la tienda con 0 productos asignados
+        // abrir el archivo con 0 productos
         ofstream nuevaTienda(archivoTiendaActiva);
         nuevaTienda << 0 << endl;
         nuevaTienda.close();
@@ -145,11 +142,12 @@ void gestionInicialTiendas(vector<producto> &inventario)
 
         if (lista.is_open())
         {
-            // CORRECCION: Lee la linea entera del archivo maestro (nombres con espacios completos)
+
             while (getline(lista, nombreTiendaLeida))
             {
-                //uso ia (gemini)
-                if (nombreTiendaLeida.empty()) continue; 
+                // uso ia (gemini) Filtro para ignorar registros vacíos
+                if (nombreTiendaLeida.empty())
+                    continue;
 
                 cout << contadorTiendas << ". " << nombreTiendaLeida << endl;
                 tiendasDisponibles.push_back(nombreTiendaLeida);
@@ -169,10 +167,10 @@ void gestionInicialTiendas(vector<producto> &inventario)
             int seleccion;
             cout << "Seleccione el numero de su tienda: ";
             cin >> seleccion;
-            
-            cin.ignore(); // Limpiamos el enter del buffer de entrada
 
-            seleccion--; 
+            // Uso de IA (gemini): Limpiamos el enter del buffer de entrada
+            cin.ignore();
+            seleccion--;
 
             if (seleccion >= 0 && seleccion < tiendasDisponibles.size())
             {
@@ -210,7 +208,6 @@ void menuDueno(int &opcionDueno)
     cin >> opcionDueno;
 }
 
-
 producto agregarProducto(vector<producto> &inventario)
 {
     int opSeguir = 0;
@@ -236,7 +233,7 @@ producto agregarProducto(vector<producto> &inventario)
         a.porcentaje = 0.0;
         a.ahorro = 0.0;
 
-        // linea 77 sirve para guardar lo qu epreviamente ingreso la persona antes de esto
+        
         inventario.push_back(a);
         cout << "Producto agregado exitosamente!\n";
 
@@ -260,7 +257,7 @@ producto agregarProducto(vector<producto> &inventario)
     return a;
 }
 
-// const Si por error dentro de esta función intentas borrar un producto o cambiar un precio, el compilador te dará un error y no te dejará correr el programa.
+
 void mostrarInventario(const vector<producto> &inventario)
 {
     cout << "==========================Inventario actual==========================\n";
@@ -274,7 +271,7 @@ void mostrarInventario(const vector<producto> &inventario)
         {
             cout << i + 1 << ". Nombre: " << inventario[i].nombre;
 
-            // Si no, muestra el precio normal de siempre
+
             cout << " || Precio: $" << inventario[i].precio;
 
             cout << " || Vence: " << inventario[i].diaExp << "-" << inventario[i].mesExp << "-" << inventario[i].anioExp
@@ -293,8 +290,6 @@ void mostrarInventario(const vector<producto> &inventario)
     }
     cout << "===================================================================\n";
 }
-
-
 
 void Descuentos(vector<producto> &inventario)
 {
@@ -356,8 +351,8 @@ void Descuentos(vector<producto> &inventario)
         {
             if (inventario[elemento].tieneDescuento)
             {
-                //aqui se elimina el bool de descuento en el producto
-                inventario[elemento].tieneDescuento = false;                 
+                // aqui se elimina el bool de descuento en el producto
+                inventario[elemento].tieneDescuento = false;
                 inventario[elemento].precioOferta = inventario[elemento].precio; // Restauro el precio a sin oferta
                 cout << "----->El producto '" << inventario[elemento].nombre << "' volvio a su precio original de $" << inventario[elemento].precio << endl;
             }
@@ -430,7 +425,7 @@ void modificarProducto(vector<producto> &inventario)
 
                     while (QuiereDescuento != 2)
                     {
-                
+
                         cout << "\nDesea que se le aplique el descuento antes declarado?: " << endl;
                         cout << "1. Si.\n";
                         cout << "2. No.\n";
@@ -460,8 +455,8 @@ void modificarProducto(vector<producto> &inventario)
                         }
                     }
                 }
-                
-                //y si no tiene descuento, solo actualizar el precio
+
+                // y si no tiene descuento, solo actualizar el precio
                 else
                 {
                     cout << "Ingrese el nuevo precio: ";
@@ -476,16 +471,16 @@ void modificarProducto(vector<producto> &inventario)
                 cout << "Stock actualizado!\n";
             }
             else if (opModificar == 5)
-            { 
-                //podemos modificar esta parte, o directamente decir que es ia
+            {
                 string seguro;
-                cout << "Esta completamente seguro de eliminar '" << inventario[Opcioncambio].nombre << "'? (s/n): ";
+                cout << "Esta completamente seguro de eliminar '" << inventario[Opcioncambio].nombre << "'? (s=si/n=no): ";
                 cin >> seguro;
 
                 if (seguro == "s" || seguro == "S")
                 {
-                    // Borramos el producto usando el iterador del vector
+                    // uso de IA (gemini): Eliminar un elemento específico del vector
                     inventario.erase(inventario.begin() + Opcioncambio);
+
                     cout << "Producto eliminado exitosamente del inventario!\n";
                     break;
                 }
@@ -553,9 +548,10 @@ producto agregarCarrito(vector<producto> &carrito, vector<producto> &inventario)
                 }
                 else
                 {
-                    inventario[i].cantidad -= agregados;
+                    inventario[i].cantidad = inventario[i].cantidad - agregados;
 
                     producto productoParaCarrito;
+
                     productoParaCarrito.nombre = inventario[i].nombre;
                     productoParaCarrito.diaExp = inventario[i].diaExp;
                     productoParaCarrito.mesExp = inventario[i].mesExp;
@@ -563,8 +559,6 @@ producto agregarCarrito(vector<producto> &carrito, vector<producto> &inventario)
                     productoParaCarrito.cantidad = agregados;
                     productoParaCarrito.precio = inventario[i].precio;
                     productoParaCarrito.precioOferta = inventario[i].precioOferta;
-
-                    // CORRECCIÓN AQUÍ: Guardar si tiene o no descuento en el carrito
                     productoParaCarrito.tieneDescuento = inventario[i].tieneDescuento;
                     productoParaCarrito.porcentaje = inventario[i].porcentaje;
 
@@ -573,7 +567,7 @@ producto agregarCarrito(vector<producto> &carrito, vector<producto> &inventario)
                     {
                         if (productoParaCarrito.nombre == carrito[j].nombre)
                         {
-                            carrito[j].cantidad += productoParaCarrito.cantidad;
+                            carrito[j].cantidad= carrito[j].cantidad + productoParaCarrito.cantidad;
                             existe = true;
                             cout << "Se actualizo correctamente la cantidad de " << carrito[j].nombre << "!\n";
                             break;
@@ -670,9 +664,9 @@ void modificarCarrito(vector<producto> &carrito, vector<producto> &inventario)
         cout << "Ingrese el numero del producto que desea modificar: \n";
         cin >> opcion;
 
-        opcion--; // Ajustamos al índice de C++ (0, 1, 2...)
+        opcion--;
 
-        // Validamos que el número ingresado esté dentro del rango actual del carrito
+
         if (opcion >= 0 && opcion < carrito.size())
         {
             cout << "Del producto: " << carrito[opcion].nombre << " ¿que desea hacer?: \n";
@@ -688,18 +682,18 @@ void modificarCarrito(vector<producto> &carrito, vector<producto> &inventario)
                 cout << "¿Que producto desea agregar?: \n";
                 cin >> seleccion;
 
-                seleccion--; // Ajustamos al índice de C++
+                seleccion--; 
 
-                // Validamos que la selección exista en el inventario global
+        
                 if (seleccion >= 0 && seleccion < inventario.size())
                 {
                     cout << "¿Cuanto/s " << inventario[seleccion].nombre << " desea llevar?\n";
                     cin >> cantidad;
 
-                    // Validamos si hay suficiente stock disponible en la tienda
+                
                     if (cantidad > 0 && cantidad <= inventario[seleccion].cantidad)
                     {
-                        // 1. Opcional pero recomendado: Devolvemos al inventario el stock del producto que vamos a quitar
+                        //Devolvemos al inventario el stock del producto que vamos a quitar
                         for (int j = 0; j < inventario.size(); j++)
                         {
                             if (inventario[j].nombre == carrito[opcion].nombre)
@@ -709,14 +703,13 @@ void modificarCarrito(vector<producto> &carrito, vector<producto> &inventario)
                             }
                         }
 
-                        // 2. Aplicamos tu idea: Sobreescribimos los datos del struct en la misma posición
                         carrito[opcion].nombre = inventario[seleccion].nombre;
                         carrito[opcion].diaExp = inventario[seleccion].diaExp;
                         carrito[opcion].mesExp = inventario[seleccion].mesExp;
                         carrito[opcion].anioExp = inventario[seleccion].anioExp;
                         carrito[opcion].cantidad = cantidad;
 
-                        // Validamos si el nuevo producto seleccionado tiene descuento activo
+                        // Validar si el nuevo producto seleccionado tiene descuento activo
                         if (inventario[seleccion].tieneDescuento)
                         {
                             carrito[opcion].precio = inventario[seleccion].precioOferta;
@@ -726,8 +719,8 @@ void modificarCarrito(vector<producto> &carrito, vector<producto> &inventario)
                             carrito[opcion].precio = inventario[seleccion].precio;
                         }
 
-                        // 3. Descontamos las nuevas unidades del inventario global
-                        inventario[seleccion].cantidad -= cantidad;
+                        // Descontar las nuevas unidades del inventario global
+                        inventario[seleccion].cantidad = inventario[seleccion].cantidad - cantidad;
 
                         cout << "Producto reemplazado exitosamente en el carrito.\n";
                         encontrado = true;
@@ -745,23 +738,24 @@ void modificarCarrito(vector<producto> &carrito, vector<producto> &inventario)
             }
             else if (cambio == 2)
             {
-                cout << "Esta completamente seguro de eliminar '" << carrito[opcion].nombre << "' del carrito? (s/n): ";
+                cout << "Esta completamente seguro de eliminar '" << carrito[opcion].nombre << "' del carrito? (s=si/n=no): ";
                 cin >> seguro;
 
                 if (seguro == "s" || seguro == "S")
                 {
-                    // Devolvemos las unidades al inventario antes de borrar el elemento del carrito
+                    // devolver las unidades al inventario antes de borrar el elemento del carrito
                     for (int j = 0; j < inventario.size(); j++)
                     {
                         if (inventario[j].nombre == carrito[opcion].nombre)
                         {
-                            inventario[j].cantidad += carrito[opcion].cantidad;
+                            inventario[j].cantidad = inventario[j].cantidad + carrito[opcion].cantidad;
                             break;
                         }
                     }
 
-                    // Borramos definitivamente la posición del carrito (el vector se encoge automáticamente)
+                    //USO DE IA (Gemini): Borramos definitivamente la posición del carrito
                     carrito.erase(carrito.begin() + opcion);
+                    
                     cout << "Producto eliminado exitosamente del carrito.\n";
                 }
                 else
@@ -796,7 +790,7 @@ void procederPago(vector<producto> &carrito, vector<producto> &inventario)
     cout << "                   RESUMEN                    \n";
     cout << "=============================================\n";
 
-    // que es size t
+    // USO DE IA (gemini): size_t asegura un índice sin signo para el vector
     for (size_t i = 0; i < carrito.size(); i++)
     {
         double precioFinal;
@@ -856,10 +850,10 @@ void procederPago(vector<producto> &carrito, vector<producto> &inventario)
             factura << "              FACTURA DE COMPRA              \n";
             factura << "=============================================\n";
 
-            //uso ia (gemini)  size_t: para asegurarnos que el numero no "tiene signo"
+           // USO DE IA (gemini): size_t asegura un índice sin signo para el vector
             for (size_t i = 0; i < carrito.size(); i++)
             {
-                double pf; 
+                double pf;
 
                 if (carrito[i].tieneDescuento == true)
                 {
@@ -867,7 +861,7 @@ void procederPago(vector<producto> &carrito, vector<producto> &inventario)
                 }
                 else
                 {
-                    pf = carrito[i].precio; 
+                    pf = carrito[i].precio;
                 }
 
                 factura << carrito[i].nombre << " x" << carrito[i].cantidad << " -> Subtotal: $" << (pf * carrito[i].cantidad) << "\n";
@@ -877,7 +871,7 @@ void procederPago(vector<producto> &carrito, vector<producto> &inventario)
             factura << "Total Ahorrado:       $" << totalAhorrado << "\n";
             factura << "TOTAL NETO PAGADO:    $" << totalPagar << "\n";
             factura << "Dinero Recibido:      $" << dineroIngresado << "\n";
-            factura << "Cambio Entregado:     $" << cambio << "\n";  //es necesario el cambio?
+            factura << "Cambio Entregado:     $" << cambio << "\n"; // es necesario el cambio?
             factura << "=============================================\n";
             factura.close();
             cout << "Factura impresa con exito en 'factura.txt'!\n";
@@ -942,7 +936,7 @@ int main()
                         // Modificar inv
                         else if (seleccionDueno == 3)
                         {
-                        
+
                             modificarProducto(inventario);
                             guardarInventarioEnArchivo(inventario, archivoTiendaActiva);
                         }
@@ -965,7 +959,6 @@ int main()
                         cout << "Has llegado al limite maximo de intentos permitidos.\n";
                         break;
                     }
-
 
                     contador++;
                 }
