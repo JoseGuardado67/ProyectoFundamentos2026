@@ -151,6 +151,7 @@ void gestionInicialTiendas(vector<producto> &inventario)
             // CORRECCION: Lee la linea entera del archivo maestro (nombres con espacios completos)
             while (getline(lista, nombreTiendaLeida))
             {
+                //uso ia (gemini)
                 if (nombreTiendaLeida.empty()) continue; 
 
                 cout << contadorTiendas << ". " << nombreTiendaLeida << endl;
@@ -165,6 +166,7 @@ void gestionInicialTiendas(vector<producto> &inventario)
             cout << "No hay tiendas registradas todavia. Creando 'mi_tienda.txt' por defecto.\n";
             archivoTiendaActiva = "mi_tienda.txt";
         }
+
         else
         {
             int seleccion;
@@ -856,6 +858,8 @@ void procederPago(vector<producto> &carrito, vector<producto> &inventario)
             factura << "       SISTEMA DE COMIDA UNIVERSITARIA       \n";
             factura << "              FACTURA DE COMPRA              \n";
             factura << "=============================================\n";
+
+            //uso ia (gemini)  size_t: para asegurarnos que el numero no "tiene signo"
             for (size_t i = 0; i < carrito.size(); i++)
             {
                 double pf; 
