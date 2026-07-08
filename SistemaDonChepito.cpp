@@ -611,8 +611,8 @@ producto agregarCarrito(vector<producto> &carrito, vector<producto> &inventario)
 
 void verCarrito(const vector<producto> &carrito)
 {
-    // 1. Declaramos la variable para el gran total aquí arriba.
-    // Empezamos en 0.0 porque el carrito está limpio.
+
+   // Empezamos en 0.0 porque el carrito está limpio.
     float totalPagar = 0.0;
 
     if (carrito.empty())
@@ -872,7 +872,7 @@ void procederPago(vector<producto> &carrito, vector<producto> &inventario)
             factura << "Total Ahorrado:       $" << totalAhorrado << "\n";
             factura << "TOTAL NETO PAGADO:    $" << totalPagar << "\n";
             factura << "Dinero Recibido:      $" << dineroIngresado << "\n";
-            factura << "Cambio Entregado:     $" << cambio << "\n"; // es necesario el cambio?
+            factura << "Cambio Entregado:     $" << cambio << "\n";
             factura << "=============================================\n";
             factura.close();
             cout << "Factura impresa con exito en 'factura.txt'!\n";
@@ -899,7 +899,7 @@ int main()
 
         if (escoger == 1)
         {
-            int contador = 1; // vuelvo a declarar cada que quiera volver a entrar
+            int contador = 1;
             bool accesoConcedido = false;
 
             while (contador <= 5 && !accesoConcedido)
