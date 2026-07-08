@@ -30,15 +30,13 @@ void guardarInventarioEnArchivo(const vector<producto> &inventario, string nombr
     
     if (archivo.is_open())
     {
-        // Guardamos el numero de productos en la primera linea
         archivo << inventario.size() << endl;
 
         for (int i = 0; i < inventario.size(); i++)
         {
-            // LINEA 1: El nombre del producto va solo en su propia linea (soporta espacios)
+
             archivo << inventario[i].nombre << endl;
             
-            // LINEA 2: Todos los numeros van abajo separados por un espacio simple
             archivo << inventario[i].diaExp << " "
                     << inventario[i].mesExp << " "
                     << inventario[i].anioExp << " "
@@ -61,8 +59,7 @@ void cargarInventarioDesdeArchivo(vector<producto> &inventario, string nombreArc
     {
         inventario.clear(); 
         string primeraLinea;
-        
-        // Leemos la primera linea completa para capturar la cantidad de productos
+
         if (getline(archivo, primeraLinea))
         {
             if (primeraLinea.empty()) 
@@ -71,7 +68,7 @@ void cargarInventarioDesdeArchivo(vector<producto> &inventario, string nombreArc
                 getline(archivo, primeraLinea);
             }
             
-            // Convertimos de texto a numero entero de forma segura
+            //uso de ia (gemini)  stoi Conversión segura de string a entero
             int cantidadProductos = stoi(primeraLinea);
             
             for (int i = 0; i < cantidadProductos; i++)
